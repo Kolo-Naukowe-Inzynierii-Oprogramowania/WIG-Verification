@@ -21,6 +21,6 @@
 ## Zalecenia (odnośnie bezpieczeństwa)
 
 1. Port 3000 jest wolny.
-2. Port 3000 jest niedostępny z zewnątrz.
+2. Port 3000 jest **niedostępny z zewnątrz**.
 3. Projekt serwera HTTP jest hostowany na tym samym serwerze co serwer WIG, na porcie 3000.
 4. Serwer SMTP jest hostowany na tym samym serwerze co serwer WIG oraz serwer HTTP.
