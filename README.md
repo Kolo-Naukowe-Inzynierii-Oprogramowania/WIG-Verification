@@ -18,7 +18,7 @@
 14. Weryfikacja studenta jest anonimowa.
 15. Weryfikacja studenta jest obowiązkowa w celu uzyskania dostępu do serwera WIG.
 
-## Zalecenia
+## Zalecenia (odnośnie bezpieczeństwa)
 
 1. Port 3000 jest wolny.
 2. Port 3000 jest niedostępny z zewnątrz.
