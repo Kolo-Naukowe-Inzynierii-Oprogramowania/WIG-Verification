@@ -17,6 +17,7 @@
 13. Weryfikacja studenta jest nieodwracalna.
 14. Weryfikacja studenta jest anonimowa.
 15. Weryfikacja studenta jest obowiązkowa w celu uzyskania dostępu do serwera WIG.
+16. Weryfikacja haseł i dostępu odbywa się przy użyciu innego pluginu.
 
 ## Zalecenia (odnośnie bezpieczeństwa)
 
