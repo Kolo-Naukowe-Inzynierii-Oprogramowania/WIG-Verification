@@ -1,0 +1,4 @@
+name: Verification
+version: '${project.version}'
+main: org.wig.verification.Verification
+api-version: '1.20'
