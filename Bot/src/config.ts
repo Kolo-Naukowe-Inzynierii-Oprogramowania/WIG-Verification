@@ -9,4 +9,8 @@ export default abstract class Config {
     public static readonly PORT: number = Number(process.env.PORT) || 3000;
 
     public static readonly DISCORD_BOT_TOKEN: string = process.env.DISCORD_BOT_TOKEN!;
+
+    public static readonly MAIL_HOST: string = process.env.MAIL_HOST!;
+
+    public static readonly MAIL_PORT: number = Number(process.env.MAIL_PORT!);
 }

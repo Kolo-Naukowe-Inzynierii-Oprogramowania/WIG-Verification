@@ -1,6 +1,7 @@
 import {Client, CommandInteraction, SlashCommandBuilder} from "discord.js";
 import {SlashCommand} from "../bot";
 import Student from "../models/Student";
+import SendVerificationMail from "../utils/mail";
 
 const Command = {
     data: new SlashCommandBuilder()
@@ -58,6 +59,16 @@ const Command = {
             });
 
             await newStudent.save();
+
+            try {
+                await SendVerificationMail(email.value as string, code);
+            } catch(err) {
+                return await interaction.reply({
+                    content: `Wystąpił błąd przy wysyłaniu e-maila. Skontaktuj się z Administratorem.`,
+                    ephemeral: true
+                });
+            }
+
             await interaction.reply({
                 content: `Wysłano prośbę o weryfikację. Sprawdź swoją skrzynkę pocztową.`,
                 ephemeral: true
