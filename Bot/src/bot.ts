@@ -29,7 +29,7 @@ const prepareSlashCommands = async () => {
         if(file.endsWith(".d.ts")) continue;
         const command = await import(path.join(__dirname, `./slash-commands/${file}`));
         client.slashDatas.push(command.default.data.toJSON());
-        client.slashCommands.set(command.default.data.name, command);
+        client.slashCommands.set(command.default.data.name, command.default);
     }
 }
 
@@ -37,7 +37,7 @@ const prepareEvents = async () => {
     for (const file of readdirSync(path.join(__dirname, `./events`))) {
         if(file.endsWith(".d.ts")) continue;
         const event = await import(path.join(__dirname, `./events/${file}`));
-        client.on(event.default.name, (...args) => event.execute(client, ...args));
+        client.on(event.default.name, (...args) => event.default.execute(client, ...args));
     }
 }
 
