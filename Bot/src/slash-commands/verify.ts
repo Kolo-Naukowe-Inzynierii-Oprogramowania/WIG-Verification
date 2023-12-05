@@ -81,3 +81,5 @@ const Command = {
         }
     }
 } as SlashCommand;
+
+export default Command;

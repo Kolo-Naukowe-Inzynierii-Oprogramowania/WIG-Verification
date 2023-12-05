@@ -1,5 +1,7 @@
 import {Client, Collection, Events, GatewayIntentBits, CommandInteraction, Partials, SlashCommandBuilder} from "discord.js";
 import {readdirSync} from "fs";
+import * as path from "path";
+import Config from "./config";
 
 interface SlashCommand {
     data: SlashCommandBuilder;
@@ -14,8 +16,8 @@ declare module "discord.js" {
 }
 
 const client = new Client({
-    intents: [GatewayIntentBits.AutoModerationConfiguration, GatewayIntentBits.AutoModerationExecution, GatewayIntentBits.DirectMessageReactions, GatewayIntentBits.DirectMessageTyping, GatewayIntentBits.DirectMessages, GatewayIntentBits.GuildEmojisAndStickers, GatewayIntentBits.GuildIntegrations, GatewayIntentBits.GuildInvites, GatewayIntentBits.GuildMembers, GatewayIntentBits.GuildMessageReactions, GatewayIntentBits.GuildMessageTyping, GatewayIntentBits.GuildMessages, GatewayIntentBits.GuildModeration, GatewayIntentBits.GuildPresences, GatewayIntentBits.GuildScheduledEvents, GatewayIntentBits.GuildVoiceStates, GatewayIntentBits.GuildWebhooks, GatewayIntentBits.Guilds, GatewayIntentBits.MessageContent],
-    partials: [Partials.Message, Partials.Channel, Partials.GuildMember, Partials.Reaction, Partials.GuildScheduledEvent, Partials.User, Partials.ThreadMember],
+    intents: [GatewayIntentBits.Guilds],
+    partials: [Partials.Message, Partials.Channel, Partials.GuildMember, Partials.Reaction, Partials.User],
     shards: "auto"
 });
 
@@ -23,29 +25,36 @@ client.slashCommands = new Collection();
 client.slashDatas = [];
 
 const prepareSlashCommands = async () => {
-    for (const file of readdirSync(`./slash-commands`)) {
-        const command = await require(`./slash-commands/${file}`) as SlashCommand;
-        client.slashDatas.push(command.data.toJSON());
-        client.slashCommands.set(command.data.name, command);
+    for (const file of readdirSync(path.join(__dirname, `./slash-commands`))) {
+        if(file.endsWith(".d.ts")) continue;
+        const command = await import(path.join(__dirname, `./slash-commands/${file}`));
+        client.slashDatas.push(command.default.data.toJSON());
+        client.slashCommands.set(command.default.data.name, command);
     }
 }
 
 const prepareEvents = async () => {
-    for (const file of readdirSync(`./events`)) {
-        const event = await require(`./events/${file}`);
-        client.on(event.name, (...args) => event.execute(client, ...args));
+    for (const file of readdirSync(path.join(__dirname, `./events`))) {
+        if(file.endsWith(".d.ts")) continue;
+        const event = await import(path.join(__dirname, `./events/${file}`));
+        client.on(event.default.name, (...args) => event.execute(client, ...args));
     }
 }
 
 const registerSlashCommands = async () => {
-    await client.application?.commands.set(client.slashDatas);
+    try {
+        await client.application?.commands.set(client.slashDatas);
+        console.log('Slash commands registered globally!');
+      } catch (error) {
+        console.error('Error registering slash commands globally:', error);
+      }
 }
 
 const start = async () => {
     await prepareSlashCommands();
     await prepareEvents();
     await registerSlashCommands();
-    await client.login(process.env.DISCORD_BOT_TOKEN);
+    await client.login(Config.DISCORD_BOT_TOKEN);
 }
 
 export default start;
