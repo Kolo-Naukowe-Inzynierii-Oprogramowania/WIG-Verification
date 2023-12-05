@@ -46,4 +46,6 @@ const Command = {
             ephemeral: true
         });
     }
-}
+} as SlashCommand;
+
+export default Command;
