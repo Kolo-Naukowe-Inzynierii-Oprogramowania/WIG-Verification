@@ -13,4 +13,6 @@ export default abstract class Config {
     public static readonly MAIL_HOST: string = process.env.MAIL_HOST!;
 
     public static readonly MAIL_PORT: number = Number(process.env.MAIL_PORT!);
+
+    public static readonly MAIL_USER: string = process.env.MAIL_USER!;
 }

@@ -12,8 +12,8 @@ const SendVerificationMail = async (to: string, code: string) => {
     });
 
     const mailOptions = {
-        from: process.env.MAIL_USER,
-        to: to,
+        from: `"Weryfikacja WIG" <${Config.MAIL_USER}>`,
+        to,
         subject: 'Kod weryfikacyjny',
         text: `Twój kod weryfikacyjny WIG to: ${code}`
     };
