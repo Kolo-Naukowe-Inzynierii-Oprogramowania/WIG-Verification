@@ -8,7 +8,7 @@ export default class Server {
   constructor() {
     this.server = Fastify();
 
-    this.server.get('/verify_user', async (request: FastifyRequest<{
+    this.server.post('/verify_user', async (request: FastifyRequest<{
         Body: {
             username: string;
         }
@@ -17,7 +17,7 @@ export default class Server {
       if(!username) return reply.status(400).send({ error: 'Bad Request' });
 
       const student = await Student.findOne({ minecraft_username: username });
-      if (!student) return reply.status(404).send({ error: 'Not Found' });
+      if (!student) return reply.status(404).send({ verified: false });
 
       return reply.status(200).send({ verified: student.verified });
     });
@@ -26,7 +26,7 @@ export default class Server {
   public async start(): Promise<void> {
     await this.server.listen({
         port: Config.PORT,
-        host: '0.0.0.0'
+        host: '127.0.0.1'
     });
   }
 }
