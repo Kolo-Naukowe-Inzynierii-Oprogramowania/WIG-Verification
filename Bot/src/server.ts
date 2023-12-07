@@ -8,7 +8,7 @@ export default class Server {
   constructor() {
     this.server = Fastify();
 
-    this.server.get('/verify_user', async (request: FastifyRequest<{
+    this.server.post('/verify_user', async (request: FastifyRequest<{
         Body: {
             username: string;
         }
@@ -16,8 +16,8 @@ export default class Server {
       const { username } = request.body;
       if(!username) return reply.status(400).send({ error: 'Bad Request' });
 
-      const student = await Student.findOne({ minecraft_username: username });
-      if (!student) return reply.status(404).send({ error: 'Not Found' });
+      const student = await Student.findOne({ minecraft_username: username.toLowerCase() });
+      if (!student) return reply.status(404).send({ verified: false });
 
       return reply.status(200).send({ verified: student.verified });
     });

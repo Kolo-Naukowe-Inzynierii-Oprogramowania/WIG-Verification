@@ -19,6 +19,13 @@ const Command = {
             ephemeral: true
         });
 
+        if(!(email.value as string).endsWith("@student.pb.edu.pl")) {
+            return await interaction.reply({
+                content: `Mozesz uzyc tylko swojego uczelnianego e-maila w domenie @student.pb.edu.pl`,
+                ephemeral: true
+            });
+        }
+
         const student = await Student.findOne({ discord_uid: interaction.user.id });
         if (student && !student.verified) {
             return await interaction.reply({
@@ -36,8 +43,8 @@ const Command = {
 
         const alreadyExists = await Student.findOne({
             $or: [
-                { minecraft_username: minecraft_username.value as string },
-                { email: email.value as string },
+                { minecraft_username: (minecraft_username.value as string).toLowerCase() },
+                { email: (email.value as string).toLowerCase()  },
             ]
         });
 
@@ -52,8 +59,8 @@ const Command = {
             const code = Math.random().toString(36).substring(7);
             const newStudent = new Student({
                 discord_uid: interaction.user.id,
-                minecraft_username: minecraft_username.value as string,
-                email: email.value as string,
+                minecraft_username: (minecraft_username.value as string).toLowerCase(),
+                email: (email.value as string).toLowerCase(),
                 verified: false,
                 verification_code: code,
             });
@@ -61,7 +68,7 @@ const Command = {
             await newStudent.save();
 
             try {
-                await SendVerificationMail(email.value as string, code);
+                await SendVerificationMail((email.value as string).toLowerCase(), code);
             } catch(err) {
                 return await interaction.reply({
                     content: `Wystąpił błąd przy wysyłaniu e-maila. Skontaktuj się z Administratorem.`,
