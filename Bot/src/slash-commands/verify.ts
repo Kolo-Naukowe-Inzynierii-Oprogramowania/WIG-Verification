@@ -19,7 +19,7 @@ const Command = {
             ephemeral: true
         });
 
-        if(!(email.value as string).endsWith("@student.pb.edu.pl")) {
+        if(!(email.value as string).toLowerCase().endsWith("@student.pb.edu.pl")) {
             return await interaction.reply({
                 content: `Mozesz uzyc tylko swojego uczelnianego e-maila w domenie @student.pb.edu.pl`,
                 ephemeral: true
